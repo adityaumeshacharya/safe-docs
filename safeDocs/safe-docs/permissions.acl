@@ -1,0 +1,35 @@
+/**
+ * Access control rules for tutorial-network
+ */
+rule SystemACL {
+  description:  "System ACL to permit all access"
+  participant: "ANY"
+  operation: ALL
+  resource: "org.hyperledger.composer.system.**"
+  action: ALLOW
+}
+rule NetworkAdministrator {
+  description: "Grant access to Admin"
+  participant: "org.hyperledger.composer.system.NetworkAdmin"
+  operation: ALL
+  resource: "**"
+  action: ALLOW
+}
+
+
+rule usersPermissions {
+  description: "Grant User to access Users resources/assets"
+  participant: "org.safedocs.documents.User"
+  operation: READ
+  resource: "org.safedocs.documents.*"
+  action: ALLOW
+}
+
+
+rule Default {
+    description: "Allow all participants access to all resources"
+    participant: "ANY"
+    operation: ALL
+    resource: "org.safedocs.documents.*"
+    action: DENY
+}
