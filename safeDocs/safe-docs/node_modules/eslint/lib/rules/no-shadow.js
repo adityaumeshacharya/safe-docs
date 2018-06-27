@@ -20,8 +20,7 @@ module.exports = {
         docs: {
             description: "disallow variable declarations from shadowing variables declared in the outer scope",
             category: "Variables",
-            recommended: false,
-            url: "https://eslint.org/docs/rules/no-shadow"
+            recommended: false
         },
 
         schema: [
@@ -179,7 +178,7 @@ module.exports = {
                 while (stack.length) {
                     const scope = stack.pop();
 
-                    stack.push(...scope.childScopes);
+                    stack.push.apply(stack, scope.childScopes);
                     checkForShadows(scope);
                 }
             }

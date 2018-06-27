@@ -1,0 +1,18 @@
+namespace org.safedocs.documents
+import composer.base.*
+
+participant User identified by username extends Member{
+  o String username
+  o String email
+}
+
+asset Documents identified by username{
+  o String username
+  o String value
+}
+
+transaction AddUser{
+}
+
+transaction AddDocs{
+}
