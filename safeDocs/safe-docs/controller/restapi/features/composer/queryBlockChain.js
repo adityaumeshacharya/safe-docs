@@ -25,7 +25,7 @@ const hfcEH = require('fabric-client/lib/EventHub');
 
 const svc = require('./Z2B_Services');
 const util = require('./Z2B_Utilities');
-const financeCoID = 'easymoney@easymoneyinc.com';
+//const financeCoID = 'easymoney@easymoneyinc.com';
 const config = require('../../../env.json');
 var chainEvents = false;
 

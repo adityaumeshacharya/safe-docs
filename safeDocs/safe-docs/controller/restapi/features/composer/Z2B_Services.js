@@ -48,31 +48,8 @@ var  Z2Blockchain  = {
  */
     createOrderTemplate: function (_inbound)
     {
-        _inbound.orderNumber = '';
-        _inbound.amount = 0;
-        _inbound.items = [];
-        _inbound.status = JSON.stringify(this.orderStatus.Created);
-        _inbound.created = new Date().toISOString();
-        _inbound.cancelled = '';
-        _inbound.ordered = '';
-        _inbound.bought = '';
-        _inbound.dateBackordered = '';
-        _inbound.requestShipment = '';
-        _inbound.delivered = '';
-        _inbound.delivering = '';
-        _inbound.disputeOpened = '';
-        _inbound.disputeResolved = '';
-        _inbound.orderRefunded = '';
-        _inbound.paymentRequested = '';
-        _inbound.paid = '';
-        _inbound.approved = '';
-        _inbound.dispute = '';
-        _inbound.resolve = '';
-        _inbound.backorder = '';
-        _inbound.refund = '';
-        _inbound.provider = '';
-        _inbound.shipper = '';
-        _inbound.financeCo = '';
+        _inbound.username = '';
+        _inbound.value = [];
         return(_inbound);
     },
 /**
@@ -99,7 +76,7 @@ var  Z2Blockchain  = {
     getItem: function (_itemNo, _itemArray)
     {
         for (let each in _itemArray)
-            { if (_itemArray[each].itemNo === _itemNo){return (_itemArray[each]);}}
+            { if (_itemArray[each].user_number === _itemNo){return (_itemArray[each]);}}
         return({'description':'Item '+_itemNo+ 'Not Found', 'unitPrice': 0, 'extendedPrice': 0});
     },
 /**
@@ -111,7 +88,7 @@ var  Z2Blockchain  = {
     setItem: function (_itemNo, _qty, _itemArray)
     {
         for (let each in _itemArray)
-            {if (_itemArray[each].itemNo === _itemNo) {_itemArray[each].quantity += _qty;} }
+            {if (_itemArray[each].user_number === _itemNo) {_itemArray[each].quantity += _qty;} }
     },
 /**
  * supplemental routine to resubmit orders when MVCC_READ_CONFLICT encountered
@@ -136,20 +113,20 @@ var  Z2Blockchain  = {
     },
 /**
  * add an order to a registry. This adds an Asset and does not execute a transaction
- * @param {order_object} _order - order_object to process
+ * @param {order_object} _document - order_object to process
  * @param {assetRegistry} _registry - registry into which asset (order) should be placed
  * @param {networkTransaction} _createNew - transaction to be processed after order successfully added
  * @param {businessNetworkConnection} _bnc - business network connection to use */
-    addOrder: function (_con, _order, _registry, _createNew, _bnc)
+    addOrder: function (_con, _document, _registry, _createNew, _bnc)
     {
-        return _registry.add(_order)
+        return _registry.add(_document)
         .then(() => {
-            this.loadTransaction(_con,_createNew, _order.orderNumber, _bnc);
+            this.loadTransaction(_con,_createNew, _document.id, _bnc);
         })
         .catch((error) => {
         if (error.message.search('MVCC_READ_CONFLICT') != -1)
-            {console.log(_order.orderNumber+" addOrder retrying assetRegistry.add for: "+_order.orderNumber);
-            this.addOrder(_con,_order, _registry, _createNew, _bnc);
+            {console.log(_document.username+" addOrder retrying assetRegistry.add for: "+_document.username);
+            this.addOrder(_con,_document, _registry, _createNew, _bnc);
             }
             else {console.log('error with assetRegistry.add', error)}
         });
@@ -177,7 +154,7 @@ var  Z2Blockchain  = {
     {
         let options = { flag : 'w' };
         let newFile = path.join(path.dirname(require.main.filename),'startup','itemList.txt');
-        let _mem = '{"items": [';
+        let _mem = '{"docs": [';
         for (let each in _table)
             {(function(_idx, _arr){if(_idx>0){_mem += ', ';} _mem += JSON.stringify(_arr[_idx]);})(each, _table)}
         _mem += ']}';
@@ -192,41 +169,35 @@ var  Z2Blockchain  = {
  */
     addItems: function (_inbound, _itemTable)
     {
-        let _amount = 0;
-        let _items = [];
+        let _docs = [];
         let _this = this;
-        for (let each in _inbound.items)
+        for (let each in _inbound.docs)
             {(function(_idx, _arr)
                 {
-                    let _item = _this.getItem(_arr[_idx].itemNo, _itemTable);
-                    _this.setItem(_arr[_idx].itemNo, _arr[_idx].quantity, _itemTable);
+                    let _item = _this.getItem(_arr[_idx].user_number, _itemTable);
+                    _this.setItem(_arr[_idx].user_number, _arr[_idx].quantity, _itemTable);
                     _arr[_idx].description = _item.itemDescription;
                     _arr[_idx].unitPrice = _item.unitPrice;
                     _arr[_idx].extendedPrice = _item.unitPrice*_arr[_idx].quantity;
                     _amount += _arr[_idx].extendedPrice;
-                    _items.push(JSON.stringify(_arr[_idx]));
+                    _docs.push(JSON.stringify(_arr[_idx]));
                 })(each, _inbound.items)}
-        return ({'items': _items, 'amount': _amount});
+        return ({'items': _docs, 'amount': _amount});
     },
 /**
  * formats an Order into a reusable json object. work-around because serializer 
  * was not initially working. This function is no longer in use.
- * @param {Order} _order - the inbound Order item retrieved from a registry
+ * @param {Order} _document - the inbound Order item retrieved from a registry
  * @return JSON object order elements
  * @function
  */
-    getOrderData: function (_order)
+    getOrderData: function (_document)
     {
-        let orderElements = ['items', 'status', 'amount', 'created', 'cancelled', 'bought', 'ordered', 'dateBackordered', 'requestShipment', 'delivered', 'delivering', 'approved',
-        'disputeOpened', 'disputeResolved', 'paymentRequested', 'orderRefunded', 'paid', 'dispute', 'resolve', 'backorder', 'refund'];
+        let orderElements = ['value'];
         var _obj = {};
         for (let each in orderElements){(function(_idx, _arr)
-        { _obj[_arr[_idx]] = _order[_arr[_idx]]; })(each, orderElements)}
-        _obj.buyer = _order.buyer.$identifier;
-        _obj.seller = _order.seller.$identifier;
-        _obj.provider = _order.seller.$provider;
-        _obj.shipper = _order.seller.$shipper;
-        _obj.financeCo = _order.seller.$financeCo;
+        { _obj[_arr[_idx]] = _document[_arr[_idx]]; })(each, orderElements)}
+        _obj.user = _document.user.username;
         return (_obj);
     },
 

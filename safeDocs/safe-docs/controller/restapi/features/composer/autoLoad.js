@@ -35,10 +35,10 @@ const financeCoID = 'easymoney@easymoneyinc.com';
 const svc = require('./Z2B_Services');
 const config = require('../../../env.json');
 /**
- * itemTable and memberTable are used by the server to reduce load time requests
+ * dataTable and memberTable are used by the server to reduce load time requests
  * for member secrets and item information
  */
-let itemTable = new Array();
+let dataTable = new Array();
 let memberTable = new Array();
 let socketAddr;
 
@@ -75,6 +75,8 @@ exports.autoLoad = function(req, res, next) {
     // get the autoload file
     let newFile = path.join(path.dirname(require.main.filename),'startup','memberList.json');
     let startupFile = JSON.parse(fs.readFileSync(newFile));
+    console.log("Hey Adi startupFile is: ");
+    console.log(startupFile.members[0]);
     // connect to the network
     let businessNetworkConnection;
     let factory; let participant;
@@ -89,7 +91,7 @@ exports.autoLoad = function(req, res, next) {
         // a businessNetworkConnection is required to add members
         businessNetworkConnection = new BusinessNetworkConnection();
         // connection prior to V0.15
-        // return businessNetworkConnection.connect(config.composer.connectionProfile, config.composer.network, config.composer.adminID, config.composer.adminPW)
+        // return businessNetworkConnec tion.connect(config.composer.connectionProfile, config.composer.network, config.composer.adminID, config.composer.adminPW)
         // connection in v0.15
         return businessNetworkConnection.connect(config.composer.adminCard)
         .then(() => {
@@ -160,46 +162,50 @@ exports.autoLoad = function(req, res, next) {
                 })(each, startupFile.members);
             }
             // iterate through the order objects in the memberList.json file.
-            for (let each in startupFile.items){(function(_idx, _arr){itemTable.push(_arr[_idx]);})(each, startupFile.items);}
-            svc.saveItemTable(itemTable);
+            for (let each in startupFile.docs){
+                (function(_idx, _arr){
+                    console.log("logging from startupFile.docs");
+                    console.log(_arr[_idx]);
+                    dataTable.push(_arr[_idx]);
+                })(each, startupFile.docs);}
+                console.log("logging from startupFile.docs");
+                console.log(dataTable);
+            svc.saveItemTable(dataTable);
             for (let each in startupFile.assets)
+                // console.log("logging from startupFile.assets");
+                // console.log(startupFile.assets[0]);
                 {(function(_idx, _arr)
                     {
                     // each type of asset, like each member, gets it's own registry. Our application
                     // has only one type of asset: 'Order'
                     return businessNetworkConnection.getAssetRegistry(config.composer.NS+'.'+_arr[_idx].type)
                     .then((assetRegistry) => {
-                        return assetRegistry.get(_arr[_idx].id)
+                        return assetRegistry.get(_arr[_idx].username)
                         .then((_res) => {
-                            console.log('['+_idx+'] order with id: '+_arr[_idx].id+' already exists in Registry '+config.composer.NS+'.'+_arr[_idx].type);
-                            svc.m_connection.sendUTF('['+_idx+'] order with id: '+_arr[_idx].id+' already exists in Registry '+config.composer.NS+'.'+_arr[_idx].type);
+                            // console.log("Hey Adi! _tmp is: ");
+                            // console.log(_tmp);
+                            console.log('['+_idx+'] documents of: '+_arr[_idx].username+' already exists in Registry '+config.composer.NS+'.'+_arr[_idx].type);
+                            svc.m_connection.sendUTF('['+_idx+'] documents: '+_arr[_idx].username+' already exists in Registry '+config.composer.NS+'.'+_arr[_idx].type);
                         })
                         .catch((error) => {
                             // first, an Order Object is created
-                            let order = factory.newResource(config.composer.NS, _arr[_idx].type, _arr[_idx].id);
-                            order = svc.createOrderTemplate(order);
-                            let _tmp = svc.addItems(_arr[_idx], itemTable);
-                            order.items = _tmp.items;
-                            order.amount = _tmp.amount;
-                            order.orderNumber = _arr[_idx].id;
+                            let document = factory.newResource(config.composer.NS, _arr[_idx].type, _arr[_idx].username);
+                            document = svc.createOrderTemplate(document);
+                            let _tmp = svc.addItems(_arr[_idx], dataTable);
+                            document.value = _tmp.docs;
+                            console.log("Hey Adi! _tmp is: ");
+                            console.log(_tmp);
+                            //document.assetNumber = _arr[_idx].id;
                             // then the buy transaction is created
-                            const createNew = factory.newTransaction(config.composer.NS, 'CreateOrder');
-                            order.buyer = factory.newRelationship(config.composer.NS, 'Buyer', _arr[_idx].buyer);
-                            order.seller = factory.newRelationship(config.composer.NS, 'Seller', _arr[_idx].seller);
-                            order.provider = factory.newRelationship(config.composer.NS, 'Provider', 'noop@dummy');
-                            order.shipper = factory.newRelationship(config.composer.NS, 'Shipper', 'noop@dummy');
-                            order.financeCo = factory.newRelationship(config.composer.NS, 'FinanceCo', financeCoID);
-                            createNew.financeCo = factory.newRelationship(config.composer.NS, 'FinanceCo', financeCoID);
-                            createNew.order = factory.newRelationship(config.composer.NS, 'Order', order.$identifier);
-                            createNew.buyer = factory.newRelationship(config.composer.NS, 'Buyer', _arr[_idx].buyer);
-                            createNew.seller = factory.newRelationship(config.composer.NS, 'Seller', _arr[_idx].seller);
-                            createNew.amount = order.amount;
+                            const createNew = factory.newTransaction(config.composer.NS, 'AddDocs');
+                            document.username = factory.newRelationship(config.composer.NS, 'User', _arr[_idx].username);
+                            createNew.document = factory.newRelationship(config.composer.NS, 'Documents', document.id);
                             // then the order is added to the asset registry.
-                            return assetRegistry.add(order)
+                            return assetRegistry.add(document)
                             .then(() => {
                                 // then a createOrder transaction is processed which uses the chaincode
                                 // establish the order with it's initial transaction state.
-                                svc.loadTransaction(svc.m_connection, createNew, order.orderNumber, businessNetworkConnection);
+                                svc.loadTransaction(svc.m_connection, createNew, document.id, businessNetworkConnection);
                             })
                             .catch((error) => {
                                 // in the development environment, because of how timing is set up, it is normal to
@@ -207,7 +213,7 @@ exports.autoLoad = function(req, res, next) {
                                 // logical transaction error.
                                 if (error.message.search('MVCC_READ_CONFLICT') !== -1)
                                 {console.log('AL: '+_arr[_idx].id+' retrying assetRegistry.add for: '+_arr[_idx].id);
-                                    svc.addOrder(svc.m_connection, order, assetRegistry, createNew, businessNetworkConnection);
+                                    svc.addOrder(svc.m_connection, document, assetRegistry, createNew, businessNetworkConnection);
                                 }
                                 else {console.log('error with assetRegistry.add', error.message);}
                             });

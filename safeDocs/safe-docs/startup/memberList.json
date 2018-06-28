@@ -1,0 +1,51 @@
+{ "members":
+    [
+        {"type": "User", "pw": "naveen", "companyName": "PaniPuri Soft Limited", "id": "naveenkansara"},
+        {"type": "User", "pw": "praveen", "companyName": "PaniPuri Soft Limited", "id": "praveenkansara"},
+        {"type": "User", "pw": "robin", "companyName": "PaniPuri Soft Limited", "id": "robinkansara"},
+        {"type": "User", "pw": "samanyu", "companyName": "PaniPuri Soft Limited", "id": "samanyukansara"},
+        {"type": "User", "pw": "bajrang", "companyName": "PaniPuri Soft Limited", "id": "bajrangjangid"},
+        {"type": "User", "pw": "birbal", "companyName": "PaniPuri Soft Limited", "id": "birbalkichar"},
+        {"type": "User", "pw": "govind", "companyName": "PaniPuri Soft Limited", "id": "govindtak"},
+        {"type": "User", "pw": "heena", "companyName": "PaniPuri Soft Limited", "id": "heenamathur"},
+        {"type": "User", "pw": "madhusoodhan", "companyName": "PaniPuri Soft Limited", "id": "madhusoodhansoni"},
+        {"type": "User", "pw": "prince", "companyName": "PaniPuri Soft Limited", "id": "princekumar"},
+        {"type": "User", "pw": "sonia", "companyName": "PaniPuri Soft Limited", "id": "soniachoudhary"},
+        {"type": "User", "pw": "sumit", "companyName": "PaniPuri Soft Limited", "id": "sumitjangid"},
+        {"type": "User", "pw": "sushil", "companyName": "PaniPuri Soft Limited", "id": "sushilkumar"},
+        {"type": "User", "pw": "aditya", "companyName": "PaniPuri Soft Limited", "id": "adityaacharya"}
+    ],
+    "docs":
+    [
+        {"user_number": 1,"aadhar_number": "1234-5678-9101-1121"},
+        {"user_number": 2,"aadhar_number": "3141-5161-7181-9202"},
+        {"user_number": 3,"aadhar_number": "1222-3242-5262-7282"},
+        {"user_number": 4,"aadhar_number": "9303-1323-3343-5363"},
+        {"user_number": 5,"aadhar_number": "7383-9404-1424-3444"},
+        {"user_number": 6,"aadhar_number": "5464-7484-9505-1525"},
+        {"user_number": 7,"aadhar_number": "3545-5565-7585-9606"},
+        {"user_number": 8,"aadhar_number": "1626-3646-5666-7686"},
+        {"user_number": 9,"aadhar_number": "9707-1727-3747-5767"},
+        {"user_number": 11,"aadhar_number": "7787-9808-1828-3848"},
+        {"user_number": 12,"aadhar_number": "5868-7888-9909-1929"},
+        {"user_number": 13,"aadhar_number": "3949-5969-7989-9100"},
+        {"user_number": 14,"aadhar_number": "1011-0210-3104-1051"}
+    ],
+    "assets":
+    [   
+        {"type": "Documents", "id": "001", "username": "naveenkansara","docs": [{"user_number": 1}] },
+        {"type": "Documents", "id": "002", "username": "praveenkansara", "docs": [{"user_number": 2}] },
+        {"type": "Documents", "id": "003", "username": "robinkansara", "docs": [{"user_number": 3}] },
+        {"type": "Documents", "id": "004", "username": "samanyukansara", "docs": [{"user_number": 4}] },
+        {"type": "Documents", "id": "005", "username": "bajrangjangid", "docs": [{"user_number": 5}] },
+        {"type": "Documents", "id": "006", "username": "birbalkichar", "docs": [{"user_number": 6}] },
+        {"type": "Documents", "id": "007", "username": "govindtak", "docs": [{"user_number": 7}] },
+        {"type": "Documents", "id": "008", "username": "heenamathur", "docs": [{"user_number": 8}] },
+        {"type": "Documents", "id": "009", "username": "madhusoodhansoni", "docs": [{"user_number": 9}] },
+        {"type": "Documents", "id": "010", "username": "princekumar", "docs": [{"user_number": 10}] },
+        {"type": "Documents", "id": "011", "username": "soniachoudhary", "docs": [{"user_number": 11}] },
+        {"type": "Documents", "id": "012", "username": "sumitjangid", "docs": [{"user_number": 12}] },
+        {"type": "Documents", "id": "013", "username": "sushilkumar", "docs": [{"user_number": 13}] },
+        {"type": "Documents", "id": "014", "username": "adityaacharya", "docs": [{"user_number": 14}] }
+    ]
+}

@@ -3,12 +3,13 @@ import composer.base.*
 
 participant User identified by username extends Member{
   o String username
-  o String email
+  o String email optional
 }
 
-asset Documents identified by username{
+asset Documents identified by id{
+  o String id
   o String username
-  o String value
+  o String[] value
 }
 
 transaction AddUser{

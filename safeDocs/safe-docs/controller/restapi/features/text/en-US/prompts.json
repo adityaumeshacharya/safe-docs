@@ -4,7 +4,7 @@
       "header": "Chapter 5: Building the Administration User Experience",
       "titleBar": "Zero to Blockchain Tutorial",
       "idx_unified": "load Unified User Experience",
-      "idx_buyer": "load Buyer User Experience",
+      "idx_user": "load User Experience",
       "idx_seller": "load Seller User Experience",
       "idx_provider": "load Provider User Experience",
       "idx_shipper": "load Shipper User Experience",
@@ -92,11 +92,7 @@
     },
     "createMember": {
       "cd_type": "Type",
-      "cd_buyer": "Buyer",
-      "cd_seller": "Seller",
-      "cd_shipper": "Shipper",
-      "cd_provider": "Provider",
-      "cd_financeco": "FinanceCo",
+      "cd_user": "User",
       "cd_cn": "Company Name",
       "cd_e": "email Address",
       "cancel": "Cancel",
@@ -134,11 +130,6 @@
       "cancel": "Cancel",
       "submit": "Submit"
     },
-    "provider": {
-      "title": "Provider Chapter 5, Select Provider to see their view: ",
-      "provider_clear": "Clear Window",
-      "providerOrderStatus": "Display Order Status"
-    },
     "removeMember": {
       "rm_type": "Type",
       "rm_members": "Members",
@@ -148,16 +139,6 @@
       "rm_secret": "secret",
       "cancel": "Cancel",
       "submit": "Submit"
-    },
-    "seller": {
-      "title": "Seller Chapter 5, Select Seller to see their view: ",
-      "seller_clear": "Clear Window",
-      "sellerOrderStatus": "Display Order Status"
-    },
-    "shipper": {
-      "title": "Shipper Chapter 5, Select Shipper to see their view: ",
-      "shipper_clear": "Clear Window",
-      "shipperOrderStatus": "Display Order Status    "
     },
     "singleUX": {},
     "orderProcess": {
@@ -192,32 +173,6 @@
       "sh_no_order_msg": "No orders for this shipper: ",
       "create_msg": "Processing Create Order request",
       "buyer": "Buyer: "
-    },
-    "financeCoOrder": {
-      "status": "Current Status: ",
-      "action": "Action",
-      "by": "By",
-      "date": "Date",
-      "comments": "Comments",
-      "created": "Created",
-      "cancelled": "Cancelled?",
-      "notCancel": "(not Cancelled)",
-      "purchased": "Purchased",
-      "noPurchase": "(no Purchase Request)",
-      "thirdParty": "3rd Party Order",
-      "nothirdParty": "(not yet sent to 3rd Party)",
-      "backordered": "Backordered?",
-      "notBackordered": "(not Backordered)",
-      "shippingRequested": "Shipping Requested",
-      "noRequestShip": "(No Request to Shipper)",
-      "shippingStarted": "Shipping Started",
-      "noDeliveryStart": "(Delivery not Started)",
-      "delivered": "Delivered",
-      "notDelivered": "(not yet Delivered)",
-      "payRequested": "Payment Requested",
-      "noRequest": "(no request for payment)",
-      "disputed": "Dispute Raised",
-      "noDispute": "(not in Dispute)"
     }
   }
   
