@@ -180,15 +180,15 @@ exports.autoLoad = function(req, res, next) {
                     // has only one type of asset: 'Order'
                     return businessNetworkConnection.getAssetRegistry(config.composer.NS+'.'+_arr[_idx].type)
                     .then((assetRegistry) => {
+                        console.log(_arr[_idx].username);
                         return assetRegistry.get(_arr[_idx].username)
                         .then((_res) => {
-                            // console.log("Hey Adi! _tmp is: ");
-                            // console.log(_tmp);
                             console.log('['+_idx+'] documents of: '+_arr[_idx].username+' already exists in Registry '+config.composer.NS+'.'+_arr[_idx].type);
                             svc.m_connection.sendUTF('['+_idx+'] documents: '+_arr[_idx].username+' already exists in Registry '+config.composer.NS+'.'+_arr[_idx].type);
                         })
                         .catch((error) => {
                             // first, an Order Object is created
+                            console.log(_arr[_idx].username);
                             let document = factory.newResource(config.composer.NS, _arr[_idx].type, _arr[_idx].username);
                             document = svc.createOrderTemplate(document);
                             let _tmp = svc.addItems(_arr[_idx], dataTable);
@@ -203,6 +203,9 @@ exports.autoLoad = function(req, res, next) {
                             // then the order is added to the asset registry.
                             return assetRegistry.add(document)
                             .then(() => {
+                                console.log("logging document");
+                                console.log(document);
+                                console.log(createNew);
                                 // then a createOrder transaction is processed which uses the chaincode
                                 // establish the order with it's initial transaction state.
                                 svc.loadTransaction(svc.m_connection, createNew, document.id, businessNetworkConnection);

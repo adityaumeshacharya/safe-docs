@@ -176,13 +176,10 @@ var  Z2Blockchain  = {
                 {
                     let _item = _this.getItem(_arr[_idx].user_number, _itemTable);
                     _this.setItem(_arr[_idx].user_number, _arr[_idx].quantity, _itemTable);
-                    _arr[_idx].description = _item.itemDescription;
-                    _arr[_idx].unitPrice = _item.unitPrice;
-                    _arr[_idx].extendedPrice = _item.unitPrice*_arr[_idx].quantity;
-                    _amount += _arr[_idx].extendedPrice;
+                    _arr[_idx].aadhar_number = _item.aadhar_number;
                     _docs.push(JSON.stringify(_arr[_idx]));
-                })(each, _inbound.items)}
-        return ({'items': _docs, 'amount': _amount});
+                })(each, _inbound.docs)}
+        return ({'docs': _docs});
     },
 /**
  * formats an Order into a reusable json object. work-around because serializer 

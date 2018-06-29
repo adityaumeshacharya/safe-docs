@@ -3,7 +3,6 @@ import composer.base.*
 
 participant User identified by username extends Member{
   o String username
-  o String email optional
 }
 
 asset Documents identified by id{

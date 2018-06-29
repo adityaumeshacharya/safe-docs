@@ -34,7 +34,6 @@
 
      //create user
      var user = factory.newResource(NS, 'User', 'aditya1');
-     user.email = 'aditya1@aditya.org';
      return getParticipantRegistry(NS + '.User')
         .then(function(userRegistry){
             //add user
