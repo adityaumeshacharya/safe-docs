@@ -29,6 +29,7 @@ const hlc_idCard = require('composer-common').IdCard;
 
 const AdminConnection = require('composer-admin').AdminConnection;
 const BusinessNetworkConnection = require('composer-client').BusinessNetworkConnection;
+const financeCoID = 'easymoney@easymoneyinc.com';
 
 
 const svc = require('./Z2B_Services');
@@ -211,10 +212,6 @@ exports.autoLoad = function(req, res, next) {
                                 svc.loadTransaction(svc.m_connection, createNew, document.id, businessNetworkConnection);
                             })
                             .catch((error) => {
-                                console.log("error is:"+error);
-                                console.log(document);
-                                console.log("logging createNew");
-                                console.log(createNew);
                                 // in the development environment, because of how timing is set up, it is normal to
                                 // encounter the MVCC_READ_CONFLICT error. This is a database timing error, not a
                                 // logical transaction error.

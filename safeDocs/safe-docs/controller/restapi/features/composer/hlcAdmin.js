@@ -493,8 +493,6 @@ exports.getRegistries = function(req, res, next)
 exports.getMembers = function(req, res, next) {
     // connect to the network
     // let method = 'getMembers';
-    console.log("logging from getMembers");
-    console.log(req.body);
     let allMembers = new Array();
     let businessNetworkConnection;
     businessNetworkConnection = new BusinessNetworkConnection();
@@ -539,7 +537,7 @@ exports.getMembers = function(req, res, next) {
                 .catch((error) => {console.log('error with getAllMembers', error);
                     res.send({'result': 'failed '+error.message, 'members': []});});
             })
-        .catch((error) => {console.log('error with getRegistry1', error);
+        .catch((error) => {console.log('error with getRegistry', error);
             res.send({'result': 'failed '+error.message, 'members': []});});
         })
         .catch((error) => {console.log('error with business network Connect', error.message);
@@ -685,7 +683,7 @@ exports.getAssets = function(req, res, next) {
                                             switch (req.body.registry)
                                             {
                                             case 'Documents':
-                                                _jsn.id = _arr[_idx].username;
+                                                _jsn.id = _arr[_idx].id;
                                                 break;
                                             default:
                                                 _jsn.id = _arr[_idx].id;
@@ -698,7 +696,7 @@ exports.getAssets = function(req, res, next) {
                                         _jsn.type = req.body.registry;
                                         switch (req.body.registry)
                                         {
-                                        case 'Document':
+                                        case 'Documents':
                                             _jsn.id = _arr[_idx].id;
                                             break;
                                         default:
@@ -717,8 +715,8 @@ exports.getAssets = function(req, res, next) {
                             res.send({'result': 'failed', 'error': 'getAllOrders: '+error.message});
                         });
                     })
-                    .catch((error) => {console.log('error with getRegistry2', error);
-                        res.send({'result': 'failed', 'error': 'getRegistry5: '+error.message});
+                    .catch((error) => {console.log('error with getRegistry', error);
+                        res.send({'result': 'failed', 'error': 'getRegistry: '+error.message});
                     });
             })
             .catch((error) => {console.log('error with business network Connect', error);

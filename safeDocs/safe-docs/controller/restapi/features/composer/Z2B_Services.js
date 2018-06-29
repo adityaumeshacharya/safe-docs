@@ -119,13 +119,7 @@ var  Z2Blockchain  = {
  * @param {businessNetworkConnection} _bnc - business network connection to use */
     addOrder: function (_con, _document, _registry, _createNew, _bnc)
     {
-<<<<<<< HEAD
         console.log("_document is:");
-=======
-        console.log("logging from addOrder:");
-        console.log(_createNew);
-        console.log("logging from addOrder:");
->>>>>>> bce523e7f8a64dc753069f305eecb67f797b16b0
         console.log(_document);
         return _registry.add(_document)
         .then(() => {
