@@ -20,24 +20,12 @@
  */
 function memberLoad ()
 {
+  console.log("in memeberLoad");
   var options = {};
-  options.registry = 'Seller';
-  var options2 = {};
-  options2.registry = 'Buyer';
-  var options3 = {};
-  options3.registry = 'Provider';
-  var options4 = {};
-  options4.registry = 'Shipper';
-  $.when($.post('/composer/admin/getMembers', options), $.post('/composer/admin/getMembers', options2),
-      $.post('/composer/admin/getMembers', options3), $.post('/composer/admin/getMembers', options4)).done(function (_sellers, _buyers, _providers, _shippers)
+  options.registry = 'User';
+  $.when($.post('/composer/admin/getMembers', options)).done(function (_users)
     { 
-      buyers = _buyers[0].members;
-      sellers = _sellers[0].members;
-      s_string = _getMembers(sellers);
-      providers = _providers[0].members
-      p_string = _getMembers(providers);
-      shippers = _shippers[0].members
-      sh_string = _getMembers(shippers);
+      users = _users[0].members;
     });
 }
 /**
@@ -48,23 +36,12 @@ function deferredMemberLoad()
 {
   var d_prompts = $.Deferred();
   var options = {};
-  options.registry = 'Seller';
-  var options2 = {};
-  options2.registry = 'Buyer';
-  var options3 = {};
-  options3.registry = 'Provider';
-  var options4 = {};
-  options4.registry = 'Shipper';
-  $.when($.post('/composer/admin/getMembers', options), $.post('/composer/admin/getMembers', options2),
-      $.post('/composer/admin/getMembers', options3), $.post('/composer/admin/getMembers', options4)).done(function (_sellers, _buyers, _providers, _shippers)
+  options.registry = 'User';
+  $.when($.post('/composer/admin/getMembers', options)).done(function (_users)
     { 
-      buyers = _buyers[0].members;
-      sellers = _sellers[0].members;
-      s_string = _getMembers(sellers);
-      providers = _providers[0].members
-      p_string = _getMembers(providers);
-      shippers = _shippers[0].members
-      sh_string = _getMembers(shippers);
+      users = _users[0].members;
+      // sellers = _sellers[0].members;
+      // s_string = _getMembers(sellers);
       d_prompts.resolve();
     }).fail(d_prompts.reject);
       return d_prompts.promise();      
