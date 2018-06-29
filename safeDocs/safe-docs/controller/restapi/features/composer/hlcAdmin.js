@@ -650,6 +650,8 @@ exports.issueIdentity = function(req, res, next) {
  */
 exports.getAssets = function(req, res, next) {
     // connect to the network
+    console.log("req is :");
+    console.log(req.body);
     let allOrders = new Array();
     let businessNetworkConnection;
     let serializer;
@@ -689,21 +691,21 @@ exports.getAssets = function(req, res, next) {
                                             allOrders.push(_jsn);
                                         }
                                         break;
-                                    // case 'admin':
-                                    //     let _jsn = serializer.toJSON(_arr[_idx]);
-                                    //     _jsn.type = req.body.registry;
-                                    //     switch (req.body.registry)
-                                    //     {
-                                    //     case 'Order':
-                                    //         _jsn.id = _arr[_idx].orderNumber;
-                                    //         break;
-                                    //     default:
-                                    //         _jsn.id = _arr[_idx].id;
-                                    //     }
-                                    //     allOrders.push(_jsn);
-                                    //     break;
-                                    // default:
-                                    //     break;
+                                    case 'admin':
+                                        let _jsn = serializer.toJSON(_arr[_idx]);
+                                        _jsn.type = req.body.registry;
+                                        switch (req.body.registry)
+                                        {
+                                        case 'Document':
+                                            _jsn.id = _arr[_idx].id;
+                                            break;
+                                        default:
+                                            _jsn.id = _arr[_idx].id;
+                                        }
+                                        allOrders.push(_jsn);
+                                        break;
+                                    default:
+                                        break;
                                     }
                                 })(each, members);
                             }

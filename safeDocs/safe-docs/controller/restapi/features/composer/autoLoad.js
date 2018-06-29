@@ -178,6 +178,7 @@ exports.autoLoad = function(req, res, next) {
                     {
                     // each type of asset, like each member, gets it's own registry. Our application
                     // has only one type of asset: 'Order'
+                    console.log()
                     return businessNetworkConnection.getAssetRegistry(config.composer.NS+'.'+_arr[_idx].type)
                     .then((assetRegistry) => {
                         console.log(_arr[_idx].username);
@@ -198,7 +199,7 @@ exports.autoLoad = function(req, res, next) {
                             //document.assetNumber = _arr[_idx].id;
                             // then the buy transaction is created
                             const createNew = factory.newTransaction(config.composer.NS, 'AddDocs');
-                            document.username = factory.newRelationship(config.composer.NS, 'User', _arr[_idx].username);
+                            document.username = _arr[_idx].username;
                             createNew.document = factory.newRelationship(config.composer.NS, 'Documents', document.id);
                             // then the order is added to the asset registry.
                             return assetRegistry.add(document)
@@ -218,7 +219,13 @@ exports.autoLoad = function(req, res, next) {
                                 {console.log('AL: '+_arr[_idx].id+' retrying assetRegistry.add for: '+_arr[_idx].id);
                                     svc.addOrder(svc.m_connection, document, assetRegistry, createNew, businessNetworkConnection);
                                 }
-                                else {console.log('error with assetRegistry.add', error.message);}
+                                else {
+                                    console.log("document is:");
+                                    console.log(document.value);
+                                    console.log("createNew is:");
+                                    console.log(createNew.document);
+                                    
+                                    console.log('error with assetRegistry.add1', error.message);}
                             });
                         });
                     })
